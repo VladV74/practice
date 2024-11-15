@@ -1,14 +1,21 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+# # license removed for brevity
 import rospy
 from std_msgs.msg import String
 
-pub = rospy.Publisher('hello', String, queue_size=10)
-rospy.init_node('hello_topic_publisher')
-rospy.loginfo("Hello from PUB node")
-r = rospy.Rate(10) # 10hz
+def talker():
+    pub = rospy.Publisher('chatter', String, queue_size=10)
+    rospy.init_node('talker', anonymous=True)
+    rate = rospy.Rate(10) # 10hz
 
-while not rospy.is_shutdown():
-    pub.publish("Hello World")
-    r.sleep()
+    while not rospy.is_shutdown():
+        hello_str = "hello world %s" % rospy.get_time()
+        rospy.loginfo(hello_str)
+        pub.publish(hello_str)
+        rospy.sleep(2)
+ 
+if __name__ == '__main__':
+    try:
+         talker()
+    except rospy.ROSInterruptException:
+         pass
